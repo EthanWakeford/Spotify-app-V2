@@ -26,6 +26,8 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
+        // ViewData["id"] = _spotify.clientId;
+        ViewBag.id = _spotify.clientId;
         return View();
     }
 

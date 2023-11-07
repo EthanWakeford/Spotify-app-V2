@@ -4,11 +4,11 @@ namespace v2_spotify_app.SpotifyApiController;
 public class Spotify
 {
 
-    private readonly string _clientId;
-    private readonly string _clientSecret;
+    public readonly string clientId;
+    public readonly string clientSecret;
     public Spotify(string clientId, string clientSecret)
     {
-        _clientId = clientId;
-        _clientSecret = clientSecret;
+        this.clientId = clientId;
+        this.clientSecret = clientSecret;
     }
 }
