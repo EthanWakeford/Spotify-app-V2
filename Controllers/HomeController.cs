@@ -21,17 +21,14 @@ public class HomeController : Controller
         DotEnv.Load(dotenv);
 
 
-
-        // need some way to check if env is not null
-        // ideally as early as possible in the application and then exit
-
+        // FIXME: need some way to check if env is null
+        // ideally as early as possible in the application and then exit if true
         _logger = logger;
         _spotify = new Spotify(clientId, clientSecret);
     }
 
     public async Task<IActionResult> Index()
     {
-        // ViewData["id"] = _spotify.clientId;
         ViewBag.id = _spotify.clientId;
         ViewBag.token = await _spotify.CreateAuthCode();
         return View();

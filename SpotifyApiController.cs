@@ -14,9 +14,11 @@ public class SpotifyHttpClient : HttpClient
 public class Spotify
 {
 
+    private static readonly SpotifyHttpClient spotifyClient = new SpotifyHttpClient();
     public readonly string clientId;
     public readonly string clientSecret;
-    private static readonly SpotifyHttpClient spotifyClient = new SpotifyHttpClient();
+    private string? token;
+    private string? scopedToken;
 
 
     public Spotify(string clientId, string clientSecret)
