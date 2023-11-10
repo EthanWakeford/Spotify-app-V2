@@ -1,12 +1,15 @@
 // class for interfacing with the spotify REST API
 
+using System.Text.Json;
+using System.Text.Json.Serialization;
+
 namespace v2_spotify_app.SpotifyApiController;
 
 public class SpotifyHttpClient : HttpClient
 {
     public SpotifyHttpClient()
     {
-        // BaseAddress = new Uri("https://accounts.spotify.com/api");
+        BaseAddress = new Uri("https://accounts.spotify.com/api/");
         DefaultRequestHeaders.Clear();
     }
 }
@@ -27,35 +30,53 @@ public class Spotify
         this.clientSecret = clientSecret;
     }
 
-    public async Task<string?> CreateAuthCode()
+    private async Task<string> handleErr(HttpResponseMessage response)
     {
-        // creates an auth code with spotify API oauth auth code flow
-        const string uri = "https://accounts.spotify.com/api/token";
+        var err = await response.Content.ReadAsStringAsync();
+        return $"it broke, here's why {response.StatusCode}: {err} ";
+    }
 
+    /// <summary>
+    /// creates an auth code with spotify API oauth auth code flow
+    /// </summary>
+    /// <returns> string?</returns>
+    public async Task<string?> CreateToken()
+    {
+        const string uri = "token";
         var postData = new Dictionary<string, string>{
             {"grant_type", "client_credentials"},
             {"client_id", clientId},
             {"client_secret", clientSecret},
         };
 
-        var requestMessage = new HttpRequestMessage(HttpMethod.Post, new Uri(uri))
+        var requestMessage = new HttpRequestMessage(HttpMethod.Post, uri)
         {
             Content = new FormUrlEncodedContent(postData)
         };
 
         HttpResponseMessage response = await spotifyClient.SendAsync(requestMessage);
+        if (!response.IsSuccessStatusCode) await handleErr(response);
+
         string? responseString = await response.Content.ReadAsStringAsync();
 
-        // debugging stuff, remove later
-        Console.WriteLine($"the whole response object: {response}");
-        Console.WriteLine($"response content: {responseString}");
+        var resData = JsonSerializer.Deserialize<TokenJson>(responseString);
+        if (resData is null) return await handleErr(response);
 
-        if (responseString == null)
-        {
-            return $"it broke, here's why {response.StatusCode}";
-        }
-        return responseString;
+        token = resData.access_token;
+
+        // debugging stuff, remove later
+        Console.WriteLine($"response content: {resData}");
+        Console.WriteLine($"token: {token}");
+        return token;
     }
 
-    // public async Task<string?> getArtist()
+    // public async Task<string?>
+}
+
+public class TokenJson
+{
+    public string? access_token { get; set; }
+    public string? token_type { get; set; }
+    public int? expires_in { get; set; }
+
 }

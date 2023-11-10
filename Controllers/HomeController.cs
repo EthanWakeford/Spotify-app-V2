@@ -30,7 +30,7 @@ public class HomeController : Controller
     public async Task<IActionResult> Index()
     {
         ViewBag.id = _spotify.clientId;
-        ViewBag.token = await _spotify.CreateAuthCode();
+        ViewBag.token = await _spotify.CreateToken();
         return View();
     }
 
