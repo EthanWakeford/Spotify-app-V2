@@ -5,8 +5,11 @@ using v2_spotify_app.SpotifyApiController;
 
 namespace v2_spotify_app.Controllers;
 
+
 public class HomeController : Controller
 {
+    static readonly string? clientSecret = Environment.GetEnvironmentVariable("CLIENT_SECRET");
+    static readonly string? clientId = Environment.GetEnvironmentVariable("CLIENT_ID");
     private readonly ILogger<HomeController> _logger;
     private Spotify _spotify;
 
@@ -17,17 +20,20 @@ public class HomeController : Controller
         var dotenv = Path.Combine(root, ".env");
         DotEnv.Load(dotenv);
 
-        var clientId = System.Environment.GetEnvironmentVariable("CLIENT_ID");
-        var clientSecret = System.Environment.GetEnvironmentVariable("CLIENT_SECRET");
+
+
+        // need some way to check if env is not null
+        // ideally as early as possible in the application and then exit
 
         _logger = logger;
         _spotify = new Spotify(clientId, clientSecret);
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
         // ViewData["id"] = _spotify.clientId;
         ViewBag.id = _spotify.clientId;
+        ViewBag.token = await _spotify.CreateAuthCode();
         return View();
     }
 
