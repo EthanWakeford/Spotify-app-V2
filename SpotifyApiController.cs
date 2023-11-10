@@ -65,7 +65,7 @@ public class Spotify
 
         if (token is null) return $"token is null, I have no idea why";
 
-        // debugging stuff, remove later
+        // TODO: debugging stuff, remove later
         Console.WriteLine($"response content: {resData}");
         Console.WriteLine($"token: {token}");
         return token;
