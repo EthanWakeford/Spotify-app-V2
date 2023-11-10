@@ -8,22 +8,14 @@ namespace v2_spotify_app.Controllers;
 
 public class HomeController : Controller
 {
-    static readonly string? clientSecret = Environment.GetEnvironmentVariable("CLIENT_SECRET");
-    static readonly string? clientId = Environment.GetEnvironmentVariable("CLIENT_ID");
+    static readonly Config config = new Config();
     private readonly ILogger<HomeController> _logger;
     private Spotify _spotify;
 
     public HomeController(ILogger<HomeController> logger)
     {
         _logger = logger;
-
-        // loading dotenv file in ENV
-        var root = Directory.GetCurrentDirectory();
-        var dotenv = Path.Combine(root, ".env");
-        DotEnv.Load(dotenv);
-
-        if (clientId is null || clientSecret is null) throw new Exception("one or more spotify client credentials are null");
-        _spotify = new Spotify(clientId, clientSecret);
+        _spotify = new Spotify(config.clientId, config.clientSecret);
     }
 
     public async Task<IActionResult> Index()

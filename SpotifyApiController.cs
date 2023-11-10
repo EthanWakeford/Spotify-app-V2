@@ -54,7 +54,7 @@ public class Spotify
         };
 
         HttpResponseMessage response = await spotifyClient.SendAsync(requestMessage);
-        if (!response.IsSuccessStatusCode) await handleErr(response);
+        if (!response.IsSuccessStatusCode) return await handleErr(response);
 
         string? responseString = await response.Content.ReadAsStringAsync();
 
