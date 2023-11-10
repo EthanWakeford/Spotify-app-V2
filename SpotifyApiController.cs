@@ -40,7 +40,7 @@ public class Spotify
     /// creates an auth code with spotify API oauth auth code flow
     /// </summary>
     /// <returns> string?</returns>
-    public async Task<string?> CreateToken()
+    public async Task<string> CreateToken()
     {
         const string uri = "token";
         var postData = new Dictionary<string, string>{
@@ -63,6 +63,8 @@ public class Spotify
         if (resData is null) return await handleErr(response);
 
         token = resData.access_token;
+
+        if (token is null) return $"token is null, I have no idea why";
 
         // debugging stuff, remove later
         Console.WriteLine($"response content: {resData}");
