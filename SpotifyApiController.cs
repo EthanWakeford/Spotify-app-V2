@@ -38,7 +38,7 @@ public class Spotify
     /// <summary>
     /// creates an auth code with spotify API oauth auth code flow
     /// </summary>
-    /// <returns> string?</returns>
+    /// <returns> @string: token string</returns>
     public async Task<string> CreateToken()
     {
         const string uri = "token";
