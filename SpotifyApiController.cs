@@ -1,7 +1,6 @@
 // class for interfacing with the spotify REST API
 
 using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace v2_spotify_app.SpotifyApiController;
 
