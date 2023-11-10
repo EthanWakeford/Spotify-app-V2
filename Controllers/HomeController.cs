@@ -15,15 +15,14 @@ public class HomeController : Controller
 
     public HomeController(ILogger<HomeController> logger)
     {
+        _logger = logger;
+
         // loading dotenv file in ENV
         var root = Directory.GetCurrentDirectory();
         var dotenv = Path.Combine(root, ".env");
         DotEnv.Load(dotenv);
 
-
-        // FIXME: need some way to check if env is null
-        // ideally as early as possible in the application and then exit if true
-        _logger = logger;
+        if (clientId is null || clientSecret is null) throw new Exception("one or more spotify client credentials are null");
         _spotify = new Spotify(clientId, clientSecret);
     }
 
