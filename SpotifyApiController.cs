@@ -20,7 +20,7 @@ public class Spotify
     public readonly string clientId;
     public readonly string clientSecret;
     private string? token;
-    private string? scopedToken;
+    // private string? scopedToken;
 
 
     public Spotify(string clientId, string clientSecret)
